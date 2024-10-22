@@ -1,0 +1,9 @@
+.highlight-text {
+  color: red;
+  font-style: italic;
+  font-weight: bold;
+}
+
+::ng-deep #checklist .p-accordion-content {
+  padding: 0 1rem !important;
+}

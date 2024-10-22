@@ -1,0 +1,7 @@
+.grid {
+  height: 100vh;
+}
+
+::ng-deep .p-fieldset .p-fieldset-content {
+  padding: 1rem !important;
+}

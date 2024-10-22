@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,16 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'sgq-ui.hugol';
+
+  isFullScreen!: boolean;
+
+  constructor(
+    private router: Router
+  ) {}
+
+  isExibirNavbar() {
+    return true;
+    //return this.router.url !== '/login' && !this.isFullScreen;
+  }
+
 }

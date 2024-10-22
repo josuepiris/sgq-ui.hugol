@@ -1,0 +1,8 @@
+.navbar {
+  margin: 0;
+  background-color: #1f2937;
+}
+
+.navbar-content > span {
+  font-weight: bold;
+}

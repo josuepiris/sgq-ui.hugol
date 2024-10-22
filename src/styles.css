@@ -1,1 +1,54 @@
-/* You can add global styles to this file, and also import other style files */
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+    margin: 0 auto;
+  }
+}
+
+html {
+  /* sets the scale of the components based on 14px. */
+  font-size: 14px;
+}
+
+body {
+  margin: 0;
+}
+
+.grid {
+  margin: 0;
+}
+
+#botaoStatus {
+  text-align: center;
+  min-width: 5rem !important;
+}
+
+.p-message .p-message-wrapper {
+  padding: 1rem;
+}
+
+.p-panel .p-panel-content {
+  padding: 1rem;
+}
+
+.p-tabview .p-tabview-panels {
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  padding: 1rem;
+}
+
+.p-accordion .p-accordion-content {
+  padding: 1rem;
+}
+
+.p-accordion .p-accordion-header .p-accordion-header-link {
+  padding: 1rem;
+}
+
+.p-dialog .p-dialog-footer button:not(:last-child) {
+  margin: 0 0.5rem 0 0 !important;
+}
+

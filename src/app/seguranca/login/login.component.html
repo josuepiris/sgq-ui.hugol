@@ -1,0 +1,37 @@
+<div class="grid justify-content-center align-items-center">
+
+  <!-- Logo centralizada
+  <div class="col-12 text-center">
+    <img src="images/logo.jpeg" alt="logo" />
+  </div>-->
+
+  <!-- Container do Formulário de Login -->
+  <div class="col-10 md:col-8 lg:col-6 xl:col-4">
+    <p-fieldset legend="Login">
+
+      <p-messages key="msg-login"/>
+
+      <form autocomplete="off" #f="ngForm">
+
+        <!-- Campo de Usuário -->
+        <div class="field p-fluid">
+          <input pInputText name="usuario" placeholder="Usuário" ngModel required #usuario />
+        </div>
+
+        <!-- Campo de Senha -->
+        <div class="field p-fluid">
+          <input pInputText type="password" name="senha" placeholder="Senha" ngModel required #senha />
+        </div>
+
+        <!-- Botão de Login -->
+        <div class="field p-fluid">
+          <button pButton type="submit" label="Login" icon="pi pi-sign-in"
+            (click)="login(usuario.value, senha.value); senha.value = '';" [disabled]="!f.valid">
+          </button>
+        </div>
+
+      </form>
+    </p-fieldset>
+  </div>
+
+</div>

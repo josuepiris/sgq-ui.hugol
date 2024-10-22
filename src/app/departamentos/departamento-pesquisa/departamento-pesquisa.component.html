@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="grid">
+
+    <div class="col-12">
+      <p-breadcrumb [model]="breadcrumbItems" [home]="home"></p-breadcrumb>
+    </div>
+
+    <div class="col-12 pt-0">
+      <p-panel header="Filtros" [toggleable]="true" collapsed="true">
+        <form autocomplete="off" (ngSubmit)="pesquisar()">
+          <div class="grid">
+            <div class="col-12 md:col-2 p-fluid">
+              <label for="codigo">Código</label>
+              <p-inputNumber inputId="integeronly" id="codigo" name="codigo" [(ngModel)]="filtro.codigo" />
+            </div>
+            <div class="col-12 md:col-10 p-fluid">
+              <label for="nome">Descrição</label>
+              <input pInputText id="nome" name="nome" [(ngModel)]="filtro.nome">
+            </div>
+            <div class="col-12 md:col-2 col-offset-10 p-fluid">
+              <button pButton type="submit" label="Pesquisar" icon="pi pi-search"></button>
+            </div>
+          </div>
+        </form>
+      </p-panel>
+    </div>
+
+    <div class="col-12 pt-0">
+      <p-table [value]="departamentos" [autoLayout]="true" [paginator]="true" [lazy]="true"
+        [rows]="filtro.itensPorPagina" [totalRecords]="totalRegistros"
+        [showCurrentPageReport]="departamentos.length > 0"
+        currentPageReportTemplate="Exibindo do {first}º ao {last}º de {totalRecords} registros"
+        styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
+        (onLazyLoad)="aoMudarPagina($event)" #dt>
+
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <span>Departamentos</span>
+            <div class="flex align-items-center gap-2">
+              <p-button [raised]="true" severity="success" icon="pi pi-plus"
+                [disabled]="!auth.temPermissao('ROLE_CADASTRAR_DEPARTAMENTO')"
+                (onClick)="cadastrarDepartamento()" />
+              <p-button [raised]="true" icon="pi pi-refresh" (onClick)="pesquisar()" />
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="w-10rem text-center">Cód.</th>
+            <th>Descrição</th>
+            <th class="w-1rem"></th> <!-- workaround -->
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-departamento>
+          <tr>
+            <td class="text-center">{{ departamento.codigo }}</td>
+            <td>{{ departamento.nome }}</td>
+            <td class="flex gap-2">
+              <p-button size="small" [link]="true"
+                [label]="departamento.ativo ? 'Ativo' : 'Inativo'"
+                [pTooltip]="'Clique p/ ' + (departamento.ativo ? 'Desativar' : 'Ativar')"
+                tooltipPosition="top" (onClick)="alterarStatus(departamento)" id="botaoStatus" />
+
+              <p-button size="small" [raised]="true" severity="warning"
+                icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"
+                [disabled]="!auth.temPermissao('ROLE_ALTERAR_DEPARTAMENTO')"
+                (onClick)="carregarDepartamento(departamento.codigo)" />
+
+              <p-button size="small" [raised]="true" severity="danger" icon="pi pi-trash"
+                pTooltip="Excluir" tooltipPosition="top"
+                [disabled]="!auth.temPermissao('ROLE_REMOVER_DEPARTAMENTO')"
+                (onClick)="confirmarExclusao(departamento)" />
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">
+              Nenhuma registro encontrado!
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+</div>

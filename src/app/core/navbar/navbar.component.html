@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="container">
+    <div class="grid">
+      <div class="col-12 py-3">
+        <div class="flex">
+          <p-tieredMenu #menu [model]="items" [popup]="true" appendTo="body"></p-tieredMenu>
+          <p-button [raised]="true" icon="pi pi-bars" (click)="menu.toggle($event)" />
+          <div class="flex align-items-center ml-auto gap-2">
+            <span>{{ auth.jwtPayload?.nome }}</span>
+            <p-button [raised]="true" severity="danger" label="Logout" icon="pi pi-sign-out" (click)="logout()" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

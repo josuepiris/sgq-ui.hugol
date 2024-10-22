@@ -1,0 +1,143 @@
+<div class="container">
+  <div class="grid">
+
+    <div class="col-12">
+      <p-breadcrumb [model]="breadcrumbItems" [home]="home"></p-breadcrumb>
+    </div>
+
+    <div class="col-12 pt-0">
+      <p-tabView>
+
+        <p-tabPanel header="Detalhes Inspeção" *ngIf="inspecao.id">
+          <div class="grid">
+            <div class="col-12 p-0 pb-3" *ngIf="inspecao.id"><b>Código:</b> {{ inspecao.id }}</div>
+
+            <div class="col-12 md:col-6 lg:col-3 p-0 pb-3" *ngIf="inspecao.id"><b>Dt/Hr Início:</b> {{ inspecao.dataHoraInicio | date:"dd/MM/yyyy HH:mm" }}</div>
+            <div class="col-12 md:col-6 lg:col-3 p-0 pb-3" *ngIf="inspecao.dataHoraFim"><b>Dt/Hr Fim:</b> {{ inspecao.dataHoraFim | date:"dd/MM/yyyy HH:mm" }}</div>
+            <div class="col-12 md:col-6 lg:col-6 p-0 pb-3" *ngIf="inspecao.id"><b>Inspetor(a):</b> {{ inspecao.inspetor.nome }}</div>
+
+            <div class="col-12 md:col-6 lg:col-3 p-0 pb-3" *ngIf="inspecao.conferente"><b>Dt/Hr Conferência:</b> {{ inspecao.dataHoraConferencia | date:"dd/MM/yyyy HH:mm" }}</div>
+            <div class="col-12 md:col-6 lg:col-9 p-0 pb-3" *ngIf="inspecao.conferente"><b>Conferente:</b> {{ inspecao.conferente.nome }}</div>
+
+            <div class="col-12 p-0 pb-3" *ngIf="inspecao.dataHoraFim">
+              <div class="flex align-items-center justify-content-end gap-2">
+                <label for="conferida">Conferida R.T.</label>
+                <p-checkbox
+                  inputId="conferida"
+                  [(ngModel)]="inspecaoConferida"
+                  [binary]="true"
+                  [disabled]="!auth.temPermissao('ROLE_CONFERIR_INSPECAO') || inspecaoConferida"
+                  (onChange)="definirConferente()" />
+                {{ inspecaoConferida }}
+              </div>
+            </div>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
+    </div>
+
+    <div class="col-12">
+      <div class="grid flex justify-content-end gap-2">
+        <!-- TODO: Ajustar após as implementação do "progressBarService". -->
+        <div class="col-12 md:col-2 p-0 p-fluid" *ngIf="!false && !inspecao.id && inspecao.checklist">
+          <p-button
+            label="Iniciar Inspeção"
+            icon="pi pi-play-circle"
+            (onClick)="confirmarAcaoInspecao()" />
+        </div>
+
+        <div class="col-12 md:col-2 p-0 p-fluid" *ngIf="inspecao.dataHoraAlteracao">
+          <p-button
+            label="Hist. Alterações"
+            icon="pi pi-list"
+            styleClass="p-button-raised p-button-secondary"
+            (onClick)="exibirHistoricoAlteracoes()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 pt-0">
+      <p-accordion [multiple]="true">
+
+        <p-accordionTab *ngFor="let item of inspecao.checklist?.itens" [header]="item.descricao"
+          [selected]="!!inspecao.id" [disabled]="!inspecao.id" id="checklist">
+
+          <!-- Grupo de botões de rádio para o item (somente se houver mais de 1 subitem) -->
+          <div class="flex align-items-center py-2" *ngIf="item.subitens.length > 1">
+            <div class="flex-grow-1">
+              <b>{{ item.descricao }}</b>
+            </div>
+            <div class="flex gap-3">
+              <div *ngFor="let option of checklistOptions">
+                <p-radioButton
+                  name="{{ 'radioButtonItem_' + item.id }}"
+                  [ngModel]="allSubitemsValue"
+                  [label]="option.label"
+                  [value]="option.value"
+                  (onClick)="setAllSubitems(item.id, option.value)">
+                </p-radioButton>
+              </div>
+            </div>
+          </div>
+
+          <div *ngFor="let subitem of item.subitens"
+            class="flex align-items-center py-2"
+            [ngClass]="{ 'border-top-1 surface-border': item.subitens.length > 1 }">
+            <!-- Área do grid para a descrição e campos de complemento -->
+            <div class="flex-grow-1">
+              <div class="grid-nogutter flex align-items-center">
+
+                <div class="col-9">
+                  <span>{{ subitem.descricao }}</span>
+                </div>
+
+                <div class="col-3 p-fluid" *ngIf="subitem.complementoTipo === 'T' || subitem.complementoTipo === 'N'">
+                  <!-- Campo de texto para complementoTipo === 'T' -->
+                  <div *ngIf="subitem.complementoTipo === 'T'">
+                    <input type="text" pInputText
+                      name="{{ 'inputSubitem_' + subitem.id }}"
+                      [(ngModel)]="subitem.complementoSubitem"
+                      [required]="subitem.valorSubitem !== 'N'"
+                      [disabled]="subitem.valorSubitem === 'N'">
+                  </div>
+
+                  <!-- Campo numérico para complementoTipo === 'N' -->
+                  <div *ngIf="subitem.complementoTipo === 'N'">
+                    <p-inputNumber
+                      [(ngModel)]="subitem.complementoSubitem"
+                      name="{{ 'inputSubitem_' + subitem.id }}"
+                      [minFractionDigits]="subitem.numeroDigitosFracaoMin"
+                      [maxFractionDigits]="subitem.numeroDigitosFracaoMax"
+                      [placeholder]="subitem.complementoPlaceholder"
+                      [suffix]="subitem.numeroUnidadeMedida ? ' ' + subitem.numeroUnidadeMedida : ''"
+                      [required]="subitem.valorSubitem !== 'N'"
+                      [disabled]="subitem.valorSubitem === 'N'">
+                    </p-inputNumber>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Botões de rádio fora do grid, alinhados à direita -->
+            <div class="flex justify-content-end ml-3">
+              <div class="flex align-items-center gap-3">
+                <div *ngFor="let option of checklistOptions">
+                  <p-radioButton
+                    name="{{ 'radioButtonSubitem_' + subitem.id }}"
+                    [(ngModel)]="subitem.valorSubitem"
+                    (ngModelChange)="subitem.valorSubitem === 'N' ? subitem.complementoSubitem = null : null"
+                    [label]="option.label"
+                    [value]="option.value"
+                    required>
+                  </p-radioButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+
+  </div>
+</div>

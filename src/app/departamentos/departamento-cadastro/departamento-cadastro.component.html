@@ -1,0 +1,24 @@
+<form #f="ngForm" autocomplete="off" class="flex flex-column justify-content-between h-full">
+  <div class="grid">
+    <div class="col-12 md:col-2 p-fluid">
+      <label for="codigo">Código</label>
+      <input pInputText type="text" id="codigo" name="codigo" [(ngModel)]="departamento.codigo" readonly />
+    </div>
+    <div class="col-12 p-fluid">
+      <label for="nome">Descrição</label>
+      <input pInputText type="text" id="nome" name="nome" [(ngModel)]="departamento.nome" required autofocus>
+    </div>
+  </div>
+
+  <!-- Div para alinhar o botão ao rodapé e à direita -->
+  <div class="flex justify-content-end mt-3">
+    <p-button
+      [raised]="true"
+      severity="success"
+      label="Salvar"
+      icon="pi pi-save"
+      (click)="salvar()"
+      [disabled]="f.invalid || f.pristine">
+    </p-button>
+  </div>
+</form>

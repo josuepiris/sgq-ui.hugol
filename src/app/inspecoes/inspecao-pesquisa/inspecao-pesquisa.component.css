@@ -1,0 +1,16 @@
+.marcador-tipo-csv {
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancelado {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
