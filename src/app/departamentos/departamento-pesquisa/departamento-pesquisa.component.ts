@@ -40,7 +40,7 @@ export class DepartamentoPesquisaComponent {
     private departamentosService: DepartamentosService,
     private errorHandler: ErrorHandlerService,
   ) {
-    this.title.setTitle('SETECH - Consulta Departamentos');
+    this.title.setTitle('SGQ - Consulta Departamentos');
 
     this.breadcrumbItems = [
       { label: 'Cadastros' },
@@ -126,10 +126,11 @@ export class DepartamentoPesquisaComponent {
   alterarStatus(departamento: any) {
     const novoStatus = !departamento.ativo;
 
-    this.departamentosService.alterarStatus(departamento.codigo, novoStatus).subscribe({
+    this.departamentosService.alterarStatus(departamento.codigo, novoStatus)
+    .subscribe({
       next: () => {
         departamento.ativo = novoStatus;
-
+        
         const acao = novoStatus ? 'ativado' : 'desativado';
         this.messageService.add({ severity: 'success', detail: `Departamento ${acao} com sucesso!` });
       },

@@ -1,0 +1,23 @@
+@media screen and (min-width: 641px) {
+  .div-button {
+    padding-top : 25px;
+  }
+}
+
+/* Aplica o alinhamento à primeira coluna da tabela (primeira célula de cada linha) */
+table td:first-child {
+  text-align: right;
+  /* padding-left: 33px; */
+  font-weight: bold;
+}
+
+/* Se precisar de mais espaço ou margens em torno da tabela */
+/* table {
+  margin: 10px 0;
+  border-collapse: collapse;
+}
+
+ Opcionalmente, você pode estilizar o <hr> se quiser
+hr {
+  margin: 5px 0;
+} */

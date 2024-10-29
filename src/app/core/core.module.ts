@@ -8,13 +8,13 @@ import localePt from '@angular/common/locales/pt';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogService } from 'primeng/dynamicdialog';
 
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
 import { environment } from '../../environments/environment';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 registerLocaleData(localePt, 'pt-BR');
 

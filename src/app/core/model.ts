@@ -25,6 +25,14 @@ export class Pessoa {
   }
 }
 
+export class PessoaFiltro {
+  codigo?: string;
+  nome?: string;
+  departamento?: string;
+  pagina = 0;
+  itensPorPagina = 10;
+}
+
 export class Subitem {
   id!: number;
   descricao!: string;

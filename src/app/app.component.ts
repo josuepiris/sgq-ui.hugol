@@ -15,8 +15,7 @@ export class AppComponent {
   ) {}
 
   isExibirNavbar() {
-    return true;
-    //return this.router.url !== '/login' && !this.isFullScreen;
+    return this.router.url !== '/login' && !this.isFullScreen;
   }
 
 }

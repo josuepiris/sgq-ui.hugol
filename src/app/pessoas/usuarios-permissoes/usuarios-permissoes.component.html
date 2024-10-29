@@ -1,0 +1,52 @@
+<div class="container">
+
+    <div class="ui-g">
+
+        <div class="ui-g-12">
+            <p-breadcrumb [model]="breadcrumbItems" [home]="home"></p-breadcrumb>
+        </div>
+
+        <p-fieldset class="ui-g-12" legend="Dados do Usuário">
+      
+            <div class="ui-g-12 ui-md-2 ui-fluid">
+                <label>Código</label>
+                <input pInputText type="text" readonly [ngModel]="funcionario.funcionarioId">
+            </div>
+    
+            <div class="ui-g-12 ui-md-4 ui-fluid">
+                <label>Nome</label>
+                <input pInputText type="text" readonly [ngModel]="funcionario.nome">
+            </div>
+      
+        </p-fieldset>
+
+        <div class="ui-g-12">
+
+            <p-pickList [source]="permissoes" [target]="permissoesUsuario"
+                [responsive]="true" dragdrop="true" filterBy="descricao" sourceFilterPlaceholder="Filtrar" targetFilterPlaceholder="Filtrar"
+                sourceHeader="Permissões não atribuídas ao Usuário" targetHeader="Permissões atribuídas ao Usuário"
+                [showSourceControls]="false" [showTargetControls]="false">
+                <ng-template let-permissao pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                        {{ permissao.codigo }} - {{ permissao.descricao }}
+                    </div>
+                </ng-template>
+            </p-pickList>
+
+        </div>
+      
+        <div class="ui-g-12 ui-md-2 ui-fluid">
+            <button pButton type="button" class="ui-button-raised"
+                label="Voltar" icon="pi pi-arrow-left"
+                [routerLink]="['/funcionarios', funcionario.funcionarioId]"></button>
+        </div>
+      
+        <div class="ui-g-12 ui-md-2 ui-md-offset-8 ui-fluid">
+            <button pButton type="button" class="ui-button-raised ui-button-success"
+                label="Salvar" icon="pi pi-save" iconPos="right"
+                (click)="salvar()"></button>
+        </div>
+
+    </div>
+
+</div>
