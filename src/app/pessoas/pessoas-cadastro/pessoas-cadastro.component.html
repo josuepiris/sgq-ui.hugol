@@ -1,77 +1,79 @@
 <div class="container">
-  <div class="ui-g">
-    <div class="ui-g-12">
+  <div class="grid">
+    <div class="col-12">
       <p-breadcrumb [model]="breadcrumbItems" [home]="home"></p-breadcrumb>
     </div>
 
     <form autocomplete="off" #formulario="ngForm">
-      <div class="ui-g-12">
-        <div style="float: right;">
-          <label style="margin-right: 0.5em;">Ativo</label>
-          <p-checkbox binary="true" value="ativo" [(ngModel)]="funcionario.ativo" name="ativo"></p-checkbox>
-        </div>
-      </div>
-
-      <p-fieldset legend="Dados do Funcionário" class="ui-g-12 ui-md-6">
-        <div class="ui-g-12" style="padding: 0em;">
-          <div class="ui-g-12 ui-md-4 ui-fluid">
-            <label>Código</label>
-            <input pInputText type="text" name="funcionarioId" [(ngModel)]="funcionario.funcionarioId" #funcionarioId="ngModel">
+      <div class="grid">
+        <div class="col-12" *ngIf="funcionario.funcionarioId">
+          <div class="flex align-items-center justify-content-end gap-2">
+            <label for="ativo">Ativo</label>
+            <p-checkbox [binary]="true" value="ativo" [(ngModel)]="funcionario.ativo" name="ativo" id="ativo" />
           </div>
         </div>
 
-        <div class="ui-g-12 ui-fluid">
-          <label>Nome</label>
-          <input pInputText type="text" name="nome" [(ngModel)]="funcionario.nome" #nome="ngModel" required>
-          <div *ngIf="nome.invalid && nome.touched" class="error-message">Nome é obrigatório.</div>
+        <div class="col-6 p-fluid">
+          <p-fieldset legend="Dados do Funcionário">
+            <div class="grid">
+              <div class="col-12">
+                <label for="funcionarioId" >Código</label>
+                <input pInputText name="funcionarioId" [(ngModel)]="funcionario.funcionarioId" id="funcionarioId" />
+              </div>
+
+              <div class="col-12">
+                <label for="nome">Nome</label>
+                <input pInputText name="nome" [(ngModel)]="funcionario!.nome" id="nome" required>
+              </div>
+              
+              <div class="col-12 p-fluid">
+                <label for="departamento">Departamento</label>
+                <p-dropdown name="departamento" [(ngModel)]="funcionario.departamento.codigo" [options]="dropdownDepartamentos" placeholder="Selecione"
+                  [filter]="true" resetFilterOnHide="true" emptyFilterMessage="Nenhum item correspondente." id="departamento" />
+              </div>
+            </div>
+          </p-fieldset>  
         </div>
-
-        <div class="ui-g-12 ui-fluid">
-          <label>Departamento</label>
-          <p-dropdown name="departamento" [(ngModel)]="funcionario.departamento" [options]="dropdownDepartamentos" placeholder="Selecione"
-            [filter]="true" resetFilterOnHide="true" emptyFilterMessage="Nenhum item correspondente.">
-          </p-dropdown>
+        
+        <div class="col-6 p-fluid">
+          <p-fieldset legend="Login">
+            <div class="grid">
+              <div class="col-12">
+                <label for="userId">ID de Usuário</label>
+                <input pInputText name="userId" [(ngModel)]="funcionario!.userId" pTooltip="Código, Nome ou E-mail" tooltipPosition="top" id="userId">
+              </div>
+              
+              <div class="col-12">
+                <label for="senha">{{ !loginAtivo ? 'Senha' : 'Redefinir Senha' }}</label>
+                <input pInputText type="password" name="senha" [(ngModel)]="funcionario!.senha" [required]="!loginAtivo" id="senha">
+              </div>
+              
+              <div class="col-12">
+                <label for="confirmacaoSenha">Confirmar Senha</label>
+                <input pInputText type="password" name="confirmacaoSenha" [(ngModel)]="confirmacaoSenha" id="confirmacaoSenha" required>
+              </div>
+            </div>
+          </p-fieldset>
         </div>
-      </p-fieldset>
-
-      <p-fieldset legend="Login" class="ui-g-12 ui-md-6">
-        <div class="ui-g-12 ui-fluid">
-          <label>ID de Usuário</label>
-          <input pInputText type="text" name="userId" [(ngModel)]="funcionario.userId" pTooltip="Código, Nome ou E-mail" tooltipPosition="top">
-        </div>
-
-        <div class="ui-g-12 ui-fluid">
-          <label>{{ !loginAtivo ? 'Senha' : 'Redefinir Senha' }}</label>
-          <input pInputText type="password" name="senha" [(ngModel)]="funcionario.senha" #senha="ngModel" [required]="!loginAtivo">
-          <div *ngIf="senha.invalid && senha.touched" class="error-message">Senha é obrigatória.</div>
-        </div>
-
-        <div class="ui-g-12 ui-fluid">
-          <label>Confirmar Senha</label>
-          <input pInputText type="password" name="confirmacaoSenha" [(ngModel)]="confirmacaoSenha" required>
-          <div *ngIf="confirmacaoSenha !== funcionario.senha" class="error-message">Senhas não conferem.</div>
-        </div>
-      </p-fieldset>
-
-      <div class="ui-g-12 ui-md-2 ui-fluid">
-        <button pButton type="button" class="ui-button-raised" label="Consultar" icon="pi pi-search" iconPos="right"
-          routerLink="/funcionarios"></button>
-      </div>
-
-      <div class="ui-g-12 ui-md-2 ui-fluid" *ngIf="editando && loginAtivo">
-        <button pButton type="button" class="ui-button-warning ui-button-raised" label="Permissões" icon="pi pi-key" iconPos="right"
-          (click)="irParaGenrenciamentoPermissoes()"></button>
-      </div>
-
-      <div [ngClass]="[editando && loginAtivo ? 'ui-g-12 ui-md-2 ui-md-offset-4 ui-fluid' :
-        'ui-g-12 ui-md-2 ui-md-offset-6 ui-fluid']">
-        <button pButton type="button" class="ui-button-raised" label="Limpar" icon="pi pi-times" iconPos="right" (click)="nova()"></button>
-      </div>
-
-      <div class="ui-g-12 ui-md-2 ui-fluid">
-        <button pButton type="button" class="ui-button-raised ui-button-success" label="Salvar" icon="pi pi-save" iconPos="right"
-          [disabled]="formulario.invalid" (click)="salvar()"></button>
       </div>
     </form>
+    
+    <div class="col-12 md:col-2 p-fluid">
+      <p-button label="Consultar" icon="pi pi-search" [raised]="true" routerLink="/funcionarios" />
+    </div>
+
+    <div class="col-12 md:col-2 p-fluid" *ngIf="editando && loginAtivo">
+      <p-button label="Permissões" icon="pi pi-key" [raised]="true" (onClick)="irParaGenrenciamentoPermissoes()" />
+    </div>
+
+    <div class="col-12 md:col-2 p-fluid">
+      <p-button label="Limpar" icon="pi pi-times" [raised]="true"
+        (onClick)="nova()" [disabled]="!editando && formulario.pristine" />
+    </div>
+
+    <div class="col-12 md:col-2 ml-auto p-fluid">
+      <p-button label="Salvar" icon="pi pi-save" [raised]="true" severity="success" [disabled]="formulario.invalid" (onClick)="salvar()" />
+    </div>
+
   </div>
 </div>

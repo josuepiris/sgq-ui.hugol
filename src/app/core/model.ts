@@ -21,6 +21,7 @@ export class Pessoa {
   assinatura!: string;
 
   constructor(funcionarioId?: number) {
+    this.departamento = new Departamento;
     this.funcionarioId = funcionarioId;
   }
 }

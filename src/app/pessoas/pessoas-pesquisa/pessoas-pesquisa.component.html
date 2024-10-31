@@ -10,20 +10,37 @@
   
         <form autocomplete="off" (ngSubmit)="pesquisar()">
           <div class="grid">
-            <div class="col-12 md:col-2 p-fluid">
-              <label>Código</label>
-              <input pInputText type="text" name="codigo" [(ngModel)]="filtro.codigo">
+
+            <div class="col-12 p-0">
+              <div class="grid">
+                <div class="col-12 md:col-2 p-fluid">
+                  <label for="codigo">Código</label>
+                  <input pInputText type="text" name="codigo" [(ngModel)]="filtro.codigo" id="codigo" />
+                </div>
+              </div>
             </div>
+            
+            <div class="col-12 p-0">
+              <div class="grid flex align-items-end">
+
+                <div class="col-12 md:col-4 p-fluid">
+                  <label>Departamento</label>
+                  <p-dropdown name="departamento" [(ngModel)]="filtro.departamento" [options]="dropdownDepartamentos" placeholder="Selecione"
+                  [filter]="true" resetFilterOnHide="true" emptyFilterMessage="Nenhum item correspondente." id="departamento" />
+                </div>
+        
+                <div class="col-12 md:col-6 p-fluid">
+                  <label>Nome</label>
+                  <input pInputText type="text" name="nome" [(ngModel)]="filtro.nome" />
+                </div>
     
-            <div class="col-12 md:col-10 p-fluid">
-              <label>Nome</label>
-              <input pInputText type="text" name="nome" [(ngModel)]="filtro.nome">
+                <div class="col-12 mb-0 md:col-2 ml-auto p-fluid">
+                  <button pButton type="submit" label="Pesquisar" icon="pi pi-search"></button> 
+                </div>
+  
+              </div>
             </div>
-    
-            <div class="col-12 md:col-2 ml-auto p-fluid">
-              <button pButton type="submit" label="Pesquisar"
-                  icon="pi pi-search" iconPos="right"></button>
-            </div>
+
           </div>
   
   
@@ -39,6 +56,16 @@
         (onLazyLoad)="aoMudarPagina($event)" autoLayout="true"
         styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
         #tabela>
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <span>Funcionários </span>
+            <div class="flex align-items-center gap-2">
+              <p-button severity="success" icon="pi pi-plus" [raised]="true" routerLink="/funcionarios/novo" />
+              <p-button [raised]="true" icon="pi pi-refresh" (onClick)="pesquisar()" />
+            </div>
+          </div>
+        </ng-template>
+
         <ng-template pTemplate="header">
           <tr>
             <th class="w-10rem text-center">Código</th>
@@ -58,10 +85,10 @@
                 [pTooltip]="pessoa.ativo ? 'Desativar' : 'Ativar'" tooltipPosition="top" 
                 (onClick)="alternarStatus(pessoa)" id="botaoStatus" [disabled]="pessoa.funcionarioId === 1" />
 
-              <p-button severity="warning" icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"
+              <p-button severity="warning" icon="pi pi-pencil" size="small" pTooltip="Editar" tooltipPosition="top"
               [routerLink]="['/funcionarios', pessoa.funcionarioId]" [disabled]="pessoa.funcionarioId === 1" />
               
-              <p-button severity="danger" icon="pi pi-trash" pTooltip="Excluir" tooltipPosition="top"
+              <p-button severity="danger" icon="pi pi-trash" size="small" pTooltip="Excluir" tooltipPosition="top"
                 (onClick)="confirmarExclusao(pessoa)" [disabled]="pessoa.funcionarioId === 1" />
             </td>
           </tr>
@@ -70,7 +97,7 @@
         <ng-template pTemplate="emptymessage">
           <tr>
             <td colspan="4">
-              Nenhuma registro encontrado!
+              Nenhum registro encontrado!
             </td>
           </tr>
         </ng-template>
@@ -85,9 +112,9 @@
       </p-table>
     </div>
 
-    <div class="col-12 md:col-2 pt-0 ml-auto p-fluid">
+    <!-- <div class="col-12 md:col-2 pt-0 ml-auto p-fluid">
       <p-button label="Cadastrar" icon="pi pi-plus" routerLink="/funcionarios/novo" />
-    </div>
+    </div> -->
 
   </div>
 

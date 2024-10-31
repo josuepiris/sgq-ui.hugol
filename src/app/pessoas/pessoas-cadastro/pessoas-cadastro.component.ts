@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { MenuItem, MessageService } from 'primeng/api';
@@ -6,6 +6,7 @@ import { DropdownItem, Pessoa } from '../../core/model';
 import { PessoasService } from '../pessoas.service';
 import { DepartamentosService } from '../../departamentos/departamentos.service';
 import { ErrorHandlerService } from '../../core/error-handler.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-pessoas-cadastro',
@@ -17,10 +18,14 @@ export class PessoasCadastroComponent implements OnInit {
   home: MenuItem;
   breadcrumbItems?: MenuItem[];
 
-  funcionario = new Pessoa(); // Usamos o objeto funcionario diretamente
+  funcionario!: Pessoa;
+
   dropdownDepartamentos: DropdownItem[] = [];
+
   loginAtivo = false;
-  confirmacaoSenha?: string;
+  confirmacaoSenha!: string | null;
+  
+  @ViewChild('formulario') form!: NgForm;
 
   constructor(
     private title: Title,
@@ -30,7 +35,8 @@ export class PessoasCadastroComponent implements OnInit {
     private departamentosService: DepartamentosService,
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
-  ) { 
+  ) {
+    this.funcionario = new Pessoa();
     this.home = { routerLink: '/home', icon: 'pi pi-home' };
   }
 
@@ -91,11 +97,13 @@ export class PessoasCadastroComponent implements OnInit {
     if (this.editando) {
       this.atualizarPessoa();
     } else {
+      console.log(this.funcionario);
       this.adicionarPessoa();
     }
   }
 
   adicionarPessoa(): void {
+    console.log(this.funcionario);
     this.pessoasService.adicionar(this.funcionario)
       .subscribe({
         next: (funcionarioAdicionado) => {
@@ -122,8 +130,7 @@ export class PessoasCadastroComponent implements OnInit {
 
   nova() {
     if (!this.editando) {
-      this.funcionario = new Pessoa(); 
-      this.confirmacaoSenha = '';
+      this.form.resetForm();
     } else {
       this.router.navigate(['/funcionarios/novo']);
     }

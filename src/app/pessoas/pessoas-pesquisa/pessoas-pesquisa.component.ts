@@ -1,11 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 import { MenuItem, ConfirmationService, MessageService } from 'primeng/api';
 
 import { PessoasService } from '../pessoas.service';
+import { DepartamentosService } from '../../departamentos/departamentos.service';
 import { ErrorHandlerService } from './../../core/error-handler.service';
-import { PessoaFiltro } from '../../core/model';
+import { DropdownItem, PessoaFiltro } from '../../core/model';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 
 
@@ -15,12 +16,13 @@ import { Table, TableLazyLoadEvent } from 'primeng/table';
   styleUrls: ['./pessoas-pesquisa.component.css']
 })
 
-export class PessoasPesquisaComponent {
+export class PessoasPesquisaComponent implements OnInit {
 
   home: MenuItem;
   breadcrumbItems: MenuItem[];
 
   filtro = new PessoaFiltro();
+  dropdownDepartamentos: DropdownItem[]= [];
   
   pessoas = [];
   totalRegistros = 0;
@@ -32,7 +34,8 @@ export class PessoasPesquisaComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private pessoasService: PessoasService,
-    private errorHandler: ErrorHandlerService,
+    private departamentosService: DepartamentosService,
+    private errorHandler: ErrorHandlerService, 
   ) { 
     
     this.title.setTitle('SGQ - Consulta de Funcionários');
@@ -43,6 +46,10 @@ export class PessoasPesquisaComponent {
     ]
 
     this.home = { routerLink: '/home', icon: 'pi pi-home' };
+  }
+
+  ngOnInit(): void {
+    this.carregarDepartamentos();
   }
 
   pesquisar(pagina = 0): void {
@@ -99,6 +106,17 @@ export class PessoasPesquisaComponent {
       }
     });
 
+  }
+
+  carregarDepartamentos() {
+    this.departamentosService.listarTodos()
+      .subscribe({
+        next: (r) => {
+          r = r.filter(dpto => dpto.ativo);
+          this.dropdownDepartamentos = r.map(dpto => ({ label: dpto.nome, value: dpto.codigo }));
+        },
+        error: (e) => this.errorHandler.handle(e)
+      });
   }
 
   excluir(pessoa: any) {
